@@ -1,27 +1,69 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Changed to flex-start to ensure content starts from the top */
+    align-items: flex-start;
     height: 100vh;
-    overflow: auto; /* Ensure scrolling if content overflows */
+    overflow: auto;
 }
 
 .container {
     background: white;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+    font-weight: bolder;
+}
+
+.logout-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
-    margin-top: 20px; /* Add margin-top to prevent content from being clipped at the top */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+.loading-message {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.content {
+    display: none;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    background-color: #fff;
 }
 
 table, th, td {
@@ -29,12 +71,15 @@ table, th, td {
 }
 
 th, td {
-    padding: 8px;
+    padding: 10px;
     text-align: left;
+    font-size: 14px;
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
 }
 
 #searchBar {
@@ -42,27 +87,31 @@ th {
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #007bff;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 0 auto;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
 .form-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .form-label {
@@ -77,8 +126,17 @@ button:hover {
     width: 65%;
     padding: 8px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 16px;
+}
+
+.time-input {
+    width: 100px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    text-align: center;
 }
 
 .small-input {
@@ -89,7 +147,7 @@ button:hover {
     background-color: #34495e;
     color: #1abc9c;
     font-size: 20px;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 .form-value {
@@ -102,19 +160,3 @@ button:hover {
 .validation-message {
     color: red;
 }
-
-.submit-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #1abc9c;
-    color: #ecf0f1;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.submit-button:hover {
-    background-color: #16a085;
-}
-

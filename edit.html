@@ -9,28 +9,32 @@
 <body>
     <div class="container">
         <h1>HR Access Portal</h1>
-        <div class="form-row">
-            <label for="quarter-start" class="form-label">Quarter Start:</label>
-            <input type="date" id="quarter-start" name="quarter_start" class="date-input" onchange="checkQuarterStart()">
+        <button id="logoutButton" class="logout-button" onclick="logout()">Logout</button>
+        <div id="loadingMessage" class="loading-message">Page loading...</div>
+        <div id="content" class="content">
+            <div class="form-row">
+                <label for="quarter-start" class="form-label">Quarter Start:</label>
+                <input type="date" id="quarter-start" name="quarter_start" class="date-input" onchange="checkQuarterStart()">
+            </div>
+            <div class="form-row">
+                <label for="quarter-end" class="form-label">Quarter End:</label>
+                <input type="date" id="quarter-end" name="quarter_end" class="date-input">
+            </div>
+            <input type="text" id="searchBar" placeholder="Search by Full Name..." onkeyup="filterResults()">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Personaltime</th>
+                        <th>PTO Hours</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+            <button onclick="submitChanges()">Submit Changes</button>
         </div>
-        <div class="form-row">
-            <label for="quarter-end" class="form-label">Quarter End:</label>
-            <input type="date" id="quarter-end" name="quarter_end" class="date-input">
-        </div>
-        <input type="text" id="searchBar" placeholder="Search by Full Name..." onkeyup="filterResults()">
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Personaltime</th>
-                    <th>PTO Hours</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <!-- Data will be inserted here -->
-            </tbody>
-        </table>
-        <button onclick="submitChanges()">Submit Changes</button>
     </div>
     <script src="edit.js"></script>
 </body>

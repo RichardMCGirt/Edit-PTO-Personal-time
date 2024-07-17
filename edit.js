@@ -2,6 +2,8 @@ const apiKey = 'pat6QyOfQCQ9InhK4.4b944a38ad4c503a6edd9361b2a6c1e7f02f216ff05605
 const baseId = 'app9gw2qxhGCmtJvW';
 const tableId = 'tbljmLpqXScwhiWTt';
 const tableBody = document.getElementById('tableBody');
+const loadingMessage = document.getElementById('loadingMessage');
+const content = document.getElementById('content');
 let records = [];
 
 // Fetch data from Airtable
@@ -9,6 +11,10 @@ async function fetchData() {
     let offset = '';
     records = []; // Reset the records array
     let totalFetched = 0; // To keep track of the number of records fetched
+
+    // Show loading message and hide content
+    loadingMessage.style.display = 'block';
+    content.style.display = 'none';
 
     do {
         console.log(`Fetching data with offset: ${offset}`);
@@ -26,6 +32,10 @@ async function fetchData() {
 
     console.log(`Total records fetched: ${totalFetched}`);
     displayData(records);
+
+    // Hide loading message and show content
+    loadingMessage.style.display = 'none';
+    content.style.display = 'block';
 }
 
 // Display data in the table
@@ -95,12 +105,20 @@ async function submitChanges() {
 
     if (response.ok) {
         console.log('Changes submitted successfully!');
-        alert('Changes submitted successfully!');
+        alert('Changes submitted successfully!');ƒ
         fetchData(); // Refresh data
     } else {
         console.error('Failed to submit changes.');
         alert('Failed to submit changes.');
     }
+}
+
+// Logout function
+function logout() {
+    console.log('Logging out...');
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = 'index.html';
 }
 
 // Initial fetch
