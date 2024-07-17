@@ -4,38 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Access Portal</title>
-    <link rel="stylesheet" href="edit.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   
 </head>
 <body>
-    <div class="container">
-        <h1>HR Access Portal</h1>
-        <button id="logoutButton" class="logout-button" onclick="logout()">Logout</button>
-        <div id="loadingMessage" class="loading-message">Page loading...</div>
-        <div id="content" class="content">
-            <div class="form-row">
-                <label for="quarter-start" class="form-label">Quarter Start:</label>
-                <input type="date" id="quarter-start" name="quarter_start" class="date-input" onchange="checkQuarterStart()">
+    <div class="container mt-5">
+        <header class="text-center mb-4">
+            <h1>HR Access Portal</h1>
+        </header>
+        <div class="card shadow p-4">
+            <div id="loadingMessage" class="alert alert-info" role="alert">Page loading...</div>
+            <div id="content" class="d-none">
+                <div class="form-row mb-3">
+                    <label for="quarter-start" class="col-sm-3 col-form-label text-right">Quarter Start:</label>
+                    <div class="col-sm-9">
+                        <input type="date" id="quarter-start" name="quarter_start" class="form-control" onchange="checkQuarterStart()">
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <label for="quarter-end" class="col-sm-3 col-form-label text-right">Quarter End:</label>
+                    <div class="col-sm-9">
+                        <input type="date" id="quarter-end" name="quarter_end" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <input type="text" id="searchBar" class="form-control" placeholder="Search by Full Name..." onkeyup="filterResults()">
+                </div>
+                <table class="table table-striped" id="dataTable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Personaltime</th>
+                            <th scope="col">PTO Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+                <button onclick="submitChanges()" class="btn btn-primary btn-block">Submit Changes</button>
             </div>
-            <div class="form-row">
-                <label for="quarter-end" class="form-label">Quarter End:</label>
-                <input type="date" id="quarter-end" name="quarter_end" class="date-input">
-            </div>
-            <input type="text" id="searchBar" placeholder="Search by Full Name..." onkeyup="filterResults()">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Personaltime</th>
-                        <th>PTO Hours</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Data will be inserted here -->
-                </tbody>
-            </table>
-            <button onclick="submitChanges()">Submit Changes</button>
         </div>
+        <button id="logoutButton" class="btn btn-danger mt-3" onclick="logout()">Logout</button>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="edit.js"></script>
 </body>
 </html>

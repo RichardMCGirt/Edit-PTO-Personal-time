@@ -13,8 +13,8 @@ async function fetchData() {
     let totalFetched = 0; // To keep track of the number of records fetched
 
     // Show loading message and hide content
-    loadingMessage.style.display = 'block';
-    content.style.display = 'none';
+    loadingMessage.classList.remove('d-none');
+    content.classList.add('d-none');
 
     do {
         console.log(`Fetching data with offset: ${offset}`);
@@ -34,21 +34,23 @@ async function fetchData() {
     displayData(records);
 
     // Hide loading message and show content
-    loadingMessage.style.display = 'none';
-    content.style.display = 'block';
+    loadingMessage.classList.add('d-none');
+    content.classList.remove('d-none');
 }
 
 // Display data in the table
 function displayData(records) {
     tableBody.innerHTML = '';
     records.forEach(record => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${record.fields['Full Name']}</td>
-            <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="time-input" min="0" step="1"></td>
-            <td><input type="number" value="${record.fields['PTO Hours'] || 0}" data-id="${record.id}" data-field="PTO Hours" class="time-input" min="0" step="1"></td>
-        `;
-        tableBody.appendChild(row);
+        if (!record.fields['Full Name'].toLowerCase().endsWith('branch')) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${record.fields['Full Name']}</td>
+                <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1"></td>
+                <td><input type="number" value="${record.fields['PTO Hours'] || 0}" data-id="${record.id}" data-field="PTO Hours" class="form-control time-input" min="0" step="1"></td>
+            `;
+            tableBody.appendChild(row);
+        }
     });
     console.log(`Displayed ${records.length} records in the table`);
 }
@@ -71,7 +73,8 @@ function checkQuarterStart() {
 function filterResults() {
     const searchValue = document.getElementById('searchBar').value.toLowerCase();
     const filteredRecords = records.filter(record =>
-        record.fields['Full Name'].toLowerCase().includes(searchValue)
+        record.fields['Full Name'].toLowerCase().includes(searchValue) &&
+        !record.fields['Full Name'].toLowerCase().endsWith('branch')
     );
     console.log(`Filtered results to ${filteredRecords.length} records based on search value: ${searchValue}`);
     displayData(filteredRecords);
@@ -105,7 +108,7 @@ async function submitChanges() {
 
     if (response.ok) {
         console.log('Changes submitted successfully!');
-        alert('Changes submitted successfully!');ƒ
+        alert('Changes submitted successfully!');
         fetchData(); // Refresh data
     } else {
         console.error('Failed to submit changes.');
@@ -118,7 +121,7 @@ function logout() {
     console.log('Logging out...');
     sessionStorage.clear();
     localStorage.clear();
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
 }
 
 // Initial fetch
