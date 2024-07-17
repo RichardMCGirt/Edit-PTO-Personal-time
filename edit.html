@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Access Portal</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-   
+    <link rel="stylesheet" href="edit.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -19,17 +19,18 @@
                 <div class="form-row mb-3">
                     <label for="quarter-start" class="col-sm-3 col-form-label text-right">Quarter Start:</label>
                     <div class="col-sm-9">
-                        <input type="date" id="quarter-start" name="quarter_start" class="form-control" onchange="checkQuarterStart()">
+                        <input type="date" id="quarter-end" name="quarter_end" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-row mb-3">
                     <label for="quarter-end" class="col-sm-3 col-form-label text-right">Quarter End:</label>
                     <div class="col-sm-9">
-                        <input type="date" id="quarter-end" name="quarter_end" class="form-control">
+                        <input type="date" id="quarter-start" name="quarter_start" class="form-control" readonly>
                     </div>
                 </div>
-                <div class="form-row mb-3">
-                    <input type="text" id="searchBar" class="form-control" placeholder="Search by Full Name..." onkeyup="filterResults()">
+                <br>
+                <div class="form-row mb-3 justify-content-center">
+                    <input type="text" id="searchBar" class="form-control" placeholder="Search by Full Name..." onkeyup="filterResults()" style="width: 65%;">
                 </div>
                 <table class="table table-striped" id="dataTable">
                     <thead class="thead-dark">

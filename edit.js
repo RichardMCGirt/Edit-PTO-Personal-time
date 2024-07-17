@@ -4,6 +4,8 @@ const tableId = 'tbljmLpqXScwhiWTt';
 const tableBody = document.getElementById('tableBody');
 const loadingMessage = document.getElementById('loadingMessage');
 const content = document.getElementById('content');
+const quarterStartInput = document.getElementById('quarter-start');
+const quarterEndInput = document.getElementById('quarter-end');
 let records = [];
 let changes = {}; // Object to store changes
 
@@ -92,6 +94,12 @@ function displayData(records) {
     });
     console.log(`Displayed ${records.length} records in the table`);
     checkQuarterStartOnce();
+    // Set Quarter Start and End Dates
+    if (records.length > 0) {
+        const firstRecord = records[0];
+        quarterStartInput.value = firstRecord.fields.PersonalStartDate || '';
+        quarterEndInput.value = firstRecord.fields.PersonalTimeendDates || '';
+    }
 }
 
 // Store changes in the changes object
