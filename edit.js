@@ -5,6 +5,36 @@ const tableBody = document.getElementById('tableBody');
 const loadingMessage = document.getElementById('loadingMessage');
 const content = document.getElementById('content');
 let records = [];
+let changes = {}; // Object to store changes
+
+// Check if the "Quarter Start" date is today and set Personaltime values to 8 if true
+function checkQuarterStartOnce() {
+    const lastChecked = localStorage.getItem('lastChecked');
+    const today = new Date().toISOString().split('T')[0];
+    const quarterStart = document.getElementById('quarter-start').value;
+
+    if (lastChecked !== today && quarterStart === today) {
+        console.log("Quarter Start date is today. Updating Personaltime values to 8.");
+        const inputs = document.querySelectorAll('input[data-field="Personaltime"]');
+        inputs.forEach(input => {
+            input.value = 8;
+            // Store the change
+            const id = input.dataset.id;
+            const field = input.dataset.field;
+            if (!changes[id]) {
+                changes[id] = {};
+            }
+            changes[id][field] = 8;
+        });
+        localStorage.setItem('lastChecked', today);
+    }
+}
+
+// Clear session and local storage on page refresh
+window.onbeforeunload = function() {
+    sessionStorage.clear();
+    localStorage.clear();
+};
 
 // Fetch data from Airtable
 async function fetchData() {
@@ -46,27 +76,25 @@ function displayData(records) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${record.fields['Full Name']}</td>
-                <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1"></td>
-                <td><input type="number" value="${record.fields['PTO Hours'] || 0}" data-id="${record.id}" data-field="PTO Hours" class="form-control time-input" min="0" step="1"></td>
+                <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
+                <td><input type="number" value="${record.fields['PTO Hours'] || 0}" data-id="${record.id}" data-field="PTO Hours" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
             `;
             tableBody.appendChild(row);
         }
     });
     console.log(`Displayed ${records.length} records in the table`);
+    checkQuarterStartOnce();
 }
 
-// Check if Quarter Start date is today
-function checkQuarterStart() {
-    const today = new Date().toISOString().split('T')[0];
-    const quarterStart = document.getElementById('quarter-start').value;
-
-    if (quarterStart === today) {
-        console.log("Quarter Start date is today. Updating Personaltime values to 8.");
-        const inputs = document.querySelectorAll('input[data-field="Personaltime"]');
-        inputs.forEach(input => {
-            input.value = 8;
-        });
+// Store changes in the changes object
+function storeChange(input) {
+    const id = input.dataset.id;
+    const field = input.dataset.field;
+    const value = parseInt(input.value, 10); // Ensure the value is an integer
+    if (!changes[id]) {
+        changes[id] = {};
     }
+    changes[id][field] = value;
 }
 
 // Filter results based on search input
@@ -82,37 +110,40 @@ function filterResults() {
 
 // Submit changes to Airtable
 async function submitChanges() {
-    const inputs = document.querySelectorAll('input[type="number"]');
     const updates = [];
-    inputs.forEach(input => {
-        const id = input.dataset.id;
-        const field = input.dataset.field;
-        const value = parseInt(input.value, 10); // Ensure the value is an integer
-        updates.push({
-            id,
-            fields: {
-                [field]: value
-            }
-        });
-    });
+
+    for (const id in changes) {
+        if (changes.hasOwnProperty(id)) {
+            updates.push({
+                id,
+                fields: changes[id]
+            });
+        }
+    }
 
     console.log(`Submitting ${updates.length} updates to Airtable`);
-    const response = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
-        method: 'PATCH',
-        headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ records: updates })
-    });
+    try {
+        const response = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ records: updates })
+        });
 
-    if (response.ok) {
-        console.log('Changes submitted successfully!');
-        alert('Changes submitted successfully!');
-        fetchData(); // Refresh data
-    } else {
-        console.error('Failed to submit changes.');
-        alert('Failed to submit changes.');
+        if (!response.ok) {
+            const errorDetails = await response.json();
+            console.error('Failed to submit changes:', errorDetails);
+            alert(`Failed to submit changes: ${errorDetails.message || 'Unknown error'}`);
+        } else {
+            console.log('Changes submitted successfully!');
+            alert('Changes submitted successfully!');
+            fetchData(); // Refresh data
+        }
+    } catch (error) {
+        console.error('Failed to submit changes:', error);
+        alert('Failed to submit changes: ' + error.message);
     }
 }
 
