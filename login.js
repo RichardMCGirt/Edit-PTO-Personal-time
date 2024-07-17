@@ -55,4 +55,3 @@ async function login() {
         alert('Login failed: ' + error.message);
     }
 }
-

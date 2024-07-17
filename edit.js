@@ -7,6 +7,14 @@ const content = document.getElementById('content');
 let records = [];
 let changes = {}; // Object to store changes
 
+// Redirect to login page if user is not authenticated
+document.addEventListener("DOMContentLoaded", function() {
+    const user = sessionStorage.getItem('user');
+    if (!user) {
+        window.location.href = 'index.html';
+    }
+});
+
 // Check if the "Quarter Start" date is today and set Personaltime values to 8 if true
 function checkQuarterStartOnce() {
     const lastChecked = localStorage.getItem('lastChecked');
