@@ -101,17 +101,21 @@ function displayData(records) {
         quarterEndInput.value = firstRecord.fields.PersonalTimeendDates || '';
     }
 }
-
 // Store changes in the changes object
 function storeChange(input) {
     const id = input.dataset.id;
     const field = input.dataset.field;
     const value = parseInt(input.value, 10); // Ensure the value is an integer
+    if (field === 'Personaltime' && value > 8) {
+        alert('Personaltime cannot exceed 8 hours.');
+        input.value = 8;
+    }
     if (!changes[id]) {
         changes[id] = {};
     }
     changes[id][field] = value;
 }
+
 
 // Filter results based on search input
 function filterResults() {
