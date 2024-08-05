@@ -45,7 +45,6 @@ window.onbeforeunload = function() {
     sessionStorage.clear();
     localStorage.clear();
 };
-
 // Fetch data from Airtable
 async function fetchData() {
     let offset = '';
@@ -71,6 +70,10 @@ async function fetchData() {
     } while (offset);
 
     console.log(`Total records fetched: ${totalFetched}`);
+    // Filter out records without Employee Number
+    records = records.filter(record => record.fields['Employee Number']);
+    // Sort records by Employee Number
+    records.sort((a, b) => a.fields['Employee Number'] - b.fields['Employee Number']);
     displayData(records);
 
     // Hide loading message and show content
@@ -87,19 +90,7 @@ function displayData(records) {
             row.innerHTML = `
                 <td>${record.fields['Full Name']}</td>
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-<td>
-  <input type="number" 
-         value="${record.fields['PTOHours'] || 0}" 
-         data-id="${record.id}" 
-         data-field="PTOHours" 
-         class="form-control time-input" 
-         min="0" 
-         step="1" 
-         oninput="storeChange(this)" 
-         readonly>
-</td>
-                                <td><input type="number" value="${record.fields['EditablePTOHours'] || 0}" data-id="${record.id}" data-field="EditablePTOHours" class="form-control time-input" step="1" oninput="storeChange(this)"></td>
-
+                <td><input type="number" value="${record.fields['PTO #'] || 0}" data-id="${record.id}" data-field="PTOHours" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
             `;
             tableBody.appendChild(row);
         }
@@ -113,6 +104,7 @@ function displayData(records) {
         quarterEndInput.value = firstRecord.fields.PersonalTimeendDates || '';
     }
 }
+
 
 // Store changes in the changes object
 function storeChange(input) {
