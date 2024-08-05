@@ -90,7 +90,7 @@ function displayData(records) {
             row.innerHTML = `
                 <td>${record.fields['Full Name']}</td>
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-                <td><input type="number" value="${record.fields['PTO #'] || 0}" data-id="${record.id}" data-field="PTOHours" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
+                <td><input type="number" value="${record.fields['PTO #'] || 0}" data-id="${record.id}" data-field="PTO #" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
             `;
             tableBody.appendChild(row);
         }
