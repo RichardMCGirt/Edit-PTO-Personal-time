@@ -87,7 +87,17 @@ function displayData(records) {
             row.innerHTML = `
                 <td>${record.fields['Full Name']}</td>
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-                <td><input type="number" value="${record.fields['PTOHours'] || 0}" data-id="${record.id}" data-field="PTOHours" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
+<td>
+  <input type="number" 
+         value="${record.fields['PTOHours'] || 0}" 
+         data-id="${record.id}" 
+         data-field="PTOHours" 
+         class="form-control time-input" 
+         min="0" 
+         step="1" 
+         oninput="storeChange(this)" 
+         readonly>
+</td>
                                 <td><input type="number" value="${record.fields['EditablePTOHours'] || 0}" data-id="${record.id}" data-field="EditablePTOHours" class="form-control time-input" step="1" oninput="storeChange(this)"></td>
 
             `;
