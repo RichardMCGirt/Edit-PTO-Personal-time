@@ -9,14 +9,6 @@ const quarterEndInput = document.getElementById('quarter-end');
 let records = [];
 let changes = {}; // Object to store changes
 
-// Redirect to login page if user is not authenticated
-document.addEventListener("DOMContentLoaded", function() {
-    const user = sessionStorage.getItem('user');
-    if (!user) {
-        window.location.href = 'index.html';
-    }
-});
-
 // Check if the "Quarter Start" date is today and set Personaltime values to 8 if true
 function checkQuarterStartOnce() {
     const lastChecked = localStorage.getItem('lastChecked');
@@ -28,6 +20,7 @@ function checkQuarterStartOnce() {
         const inputs = document.querySelectorAll('input[data-field="Personaltime"]');
         inputs.forEach(input => {
             input.value = 8;
+            input.style.backgroundColor = "lightblue"; // Set background color to light blue
             // Store the change
             const id = input.dataset.id;
             const field = input.dataset.field;
@@ -45,6 +38,7 @@ window.onbeforeunload = function() {
     sessionStorage.clear();
     localStorage.clear();
 };
+
 // Fetch data from Airtable
 async function fetchData() {
     let offset = '';
@@ -90,8 +84,8 @@ function displayData(records) {
             row.innerHTML = `
                 <td>${record.fields['Full Name']}</td>
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-<td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO #" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
-                                <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
+                <td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO #" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
+                <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
 
             `;
             tableBody.appendChild(row);
@@ -107,12 +101,12 @@ function displayData(records) {
     }
 }
 
-
 // Store changes in the changes object
 function storeChange(input) {
     const id = input.dataset.id;
     const field = input.dataset.field;
     const value = parseInt(input.value, 10); // Ensure the value is an integer
+    input.style.backgroundColor = "lightblue"; // Set background color to light blue
     if (field === 'Personaltime' && value > 8) {
         alert('Personaltime cannot exceed 8 hours.');
         input.value = 8;
@@ -121,6 +115,14 @@ function storeChange(input) {
         changes[id] = {};
     }
     changes[id][field] = value;
+}
+
+// Remove the highlight when the user clicks the submit button
+function removeHighlightsOnSubmit() {
+    const inputs = document.querySelectorAll('input.time-input');
+    inputs.forEach(input => {
+        input.style.backgroundColor = ""; // Remove background color
+    });
 }
 
 // Filter results based on search input
@@ -165,6 +167,7 @@ async function submitChanges() {
         } else {
             console.log('Changes submitted successfully!');
             alert('Changes submitted successfully!');
+            removeHighlightsOnSubmit(); // Remove highlights after submission
             fetchData(); // Refresh data
         }
     } catch (error) {
