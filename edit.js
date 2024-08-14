@@ -121,7 +121,7 @@ function storeChange(input) {
 
     // Update background color based on change
     if (value !== originalValue) {
-        input.style.backgroundColor = "lightblue"; // Set background color to light blue
+        input.style.cssText = "background-color: lightblue !important;";
     } else {
         input.style.backgroundColor = ""; // Remove background color if value is reset to original
     }
@@ -142,7 +142,7 @@ function storeChange(input) {
 // Function to update Personaltime and store change
 function updatePersonaltime(input, value) {
     input.value = value;
-    input.style.backgroundColor = "lightblue"; // Set background color to light blue
+    input.style.setProperty("background-color", "lightblue", "important");
     storeChange(input);
 }
 
