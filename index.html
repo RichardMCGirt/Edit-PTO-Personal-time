@@ -9,11 +9,10 @@
 </head>
 <body>
     <div class="container mt-5">
-        <header class="text-center mb-4">
-            <button id="logoutButton" class="btn btn-danger mt-3" onclick="logout()">Logout</button>
-            <h1>HR Access Portal</h1>
-        </header>
+       
         <div class="card shadow p-4">
+            <h1>HR Access Portal</h1>
+            <br>
             <div id="loadingMessage" class="alert alert-info" role="alert">Page loading...</div>
             <div id="content" class="d-none">
                 <div class="form-row mb-3">
@@ -48,10 +47,9 @@
                         <!-- Data will be inserted here -->
                     </tbody>
                 </table>
-                <button onclick="submitChanges()" class="btn btn-primary btn-block">Submit Changes</button>
+                <button onclick="submitChanges()" class="btn btn-primary btn-block sticky-button">Submit Changes</button>
             </div>
         </div>
-        <button id="logoutButton" class="btn btn-danger mt-3" onclick="logout()">Logout</button>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
