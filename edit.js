@@ -39,15 +39,25 @@ window.onbeforeunload = function() {
     localStorage.clear();
 };
 
+// Show loading message with updated content
+function showLoadingMessage() {
+    loadingMessage.classList.remove('d-none');
+    content.classList.add('d-none');
+}
+
+// Hide loading message
+function hideLoadingMessage() {
+    loadingMessage.classList.add('d-none');
+    content.classList.remove('d-none');
+}
+
 // Fetch data from Airtable
 async function fetchData() {
     let offset = '';
     records = []; // Reset the records array
     let totalFetched = 0; // To keep track of the number of records fetched
 
-    // Show loading message and hide content
-    loadingMessage.classList.remove('d-none');
-    content.classList.add('d-none');
+    showLoadingMessage(); // Show loading message
 
     do {
         console.log(`Fetching data with offset: ${offset}`);
@@ -70,9 +80,7 @@ async function fetchData() {
     records.sort((a, b) => a.fields['Employee Number'] - b.fields['Employee Number']);
     displayData(records);
 
-    // Hide loading message and show content
-    loadingMessage.classList.add('d-none');
-    content.classList.remove('d-none');
+    hideLoadingMessage(); // Hide loading message
 }
 
 // Display data in the table
@@ -86,7 +94,6 @@ function displayData(records) {
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
                 <td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO #" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
                 <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-
             `;
             tableBody.appendChild(row);
         }
@@ -130,7 +137,7 @@ function filterResults() {
     const searchValue = document.getElementById('searchBar').value.toLowerCase();
     const filteredRecords = records.filter(record =>
         record.fields['Full Name'].toLowerCase().includes(searchValue) &&
-        !record.fields['Full Name'].toLowerCase().endsWith('branch')
+        !record.fields['Full Name'].toLowerCase().endswith('branch')
     );
     console.log(`Filtered results to ${filteredRecords.length} records based on search value: ${searchValue}`);
     displayData(filteredRecords);

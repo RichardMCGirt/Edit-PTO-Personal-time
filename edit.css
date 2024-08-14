@@ -166,7 +166,7 @@ button:hover {
 button.sticky-button {
     position: -webkit-sticky; /* For Safari */
     position: sticky;
-    bottom: 10px; /* Adjust margin from the bottom */
+    bottom: 50px; /* Adjust margin from the bottom */
     left: 50%;
     transform: translateX(-50%); /* Center the button horizontally */
     z-index: 1000;
@@ -180,8 +180,38 @@ button.sticky-button {
     width: 15%;
     text-align: center;
     transition: background-color 0.3s;
-    padding-bottom: 10px;
+
 }
+
+/* CSS */
+#loadingMessage {
+    text-align: center;
+    font-size: 1.2em;
+    background-color: #f8f9fa; /* Light background to ensure it's visible */
+    padding: 20px; /* Add some padding for better visibility */
+    border-radius: 8px; /* Optional: rounded corners for aesthetics */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: subtle shadow for better visibility */
+}
+
+.spinner {
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-left: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loadingText {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 
 button.sticky-button:hover {
     background-color: #0056b3; /* New background color on hover */
