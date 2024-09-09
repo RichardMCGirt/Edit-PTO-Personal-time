@@ -133,15 +133,18 @@ function removeHighlightsOnSubmit() {
 }
 
 // Filter results based on search input
+// Filter results based on search input
 function filterResults() {
     const searchValue = document.getElementById('searchBar').value.toLowerCase();
-    const filteredRecords = records.filter(record =>
-        record.fields['Full Name'].toLowerCase().includes(searchValue) &&
-        !record.fields['Full Name'].toLowerCase().endswith('branch')
-    );
+    const filteredRecords = records.filter(record => {
+        const fullName = record.fields['Full Name'] || ''; // Ensure Full Name is a string or empty string
+        return fullName.toLowerCase().includes(searchValue) && 
+               !fullName.toLowerCase().endsWith('branch');
+    });
     console.log(`Filtered results to ${filteredRecords.length} records based on search value: ${searchValue}`);
     displayData(filteredRecords);
 }
+
 
 // Submit changes to Airtable
 async function submitChanges() {
