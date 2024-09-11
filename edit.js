@@ -8,6 +8,7 @@ const quarterStartInput = document.getElementById('quarter-start');
 const quarterEndInput = document.getElementById('quarter-end');
 let records = [];
 let changes = {}; // Object to store changes
+let searchMode = false; // To track if we are in search mode
 
 // Check if the "Quarter Start" date is today and set Personaltime values to 8 if true
 function checkQuarterStartOnce() {
@@ -74,10 +75,8 @@ async function fetchData() {
     } while (offset);
 
     console.log(`Total records fetched: ${totalFetched}`);
-    // Filter out records without Employee Number
-    records = records.filter(record => record.fields['Employee Number']);
-    // Sort records by Employee Number
-    records.sort((a, b) => a.fields['Employee Number'] - b.fields['Employee Number']);
+    // Sort records by Employee Number if it exists
+    records.sort((a, b) => (a.fields['Employee Number'] || 0) - (b.fields['Employee Number'] || 0));
     displayData(records);
 
     hideLoadingMessage(); // Hide loading message
@@ -86,7 +85,25 @@ async function fetchData() {
 // Display data in the table
 function displayData(records) {
     tableBody.innerHTML = '';
+
+    // If in search mode, add Employee Number header
+    if (searchMode) {
+        tableBody.innerHTML = `
+            <tr>
+    
+                <th>Employee Number</th> <!-- Display employee number header -->
+            </tr>
+        `;
+    } else {
+        tableBody.innerHTML = `
+            <tr>
+        
+            </tr>
+        `;
+    }
+
     records.forEach(record => {
+        const hasEmployeeNumber = !!record.fields['Employee Number'];
         if (!record.fields['Full Name'].toLowerCase().endsWith('branch')) {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -94,10 +111,12 @@ function displayData(records) {
                 <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
                 <td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO #" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
                 <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
+                ${searchMode ? `<td><input type="number" placeholder="Enter Employee #" data-id="${record.id}" data-field="Employee Number" class="form-control employee-input" onkeydown="checkEnterKey(event, this)"></td>` : ''}
             `;
             tableBody.appendChild(row);
         }
     });
+
     console.log(`Displayed ${records.length} records in the table`);
     checkQuarterStartOnce();
     // Set Quarter Start and End Dates
@@ -124,27 +143,75 @@ function storeChange(input) {
     changes[id][field] = value;
 }
 
-// Remove the highlight when the user clicks the submit button
-function removeHighlightsOnSubmit() {
-    const inputs = document.querySelectorAll('input.time-input');
-    inputs.forEach(input => {
-        input.style.backgroundColor = ""; // Remove background color
-    });
+// Check for "Enter" key press and handle saving Employee Number
+function checkEnterKey(event, input) {
+    if (event.key === 'Enter') {
+        const id = input.dataset.id;
+        const employeeNumber = parseInt(input.value, 10);
+        if (!employeeNumber) {
+            alert('Please enter a valid Employee Number.');
+            return;
+        }
+        input.style.backgroundColor = "lightblue"; // Highlight the field
+        if (!changes[id]) {
+            changes[id] = {};
+        }
+        changes[id]['Employee Number'] = employeeNumber;
+        console.log(`Entered Employee Number: ${employeeNumber} for record ID: ${id}`);
+        // Optionally submit changes directly after employee number input
+        submitEmployeeNumberChange(id);
+    }
 }
 
-// Filter results based on search input
+// Function to submit just the employee number change for that record
+async function submitEmployeeNumberChange(id) {
+    const update = {
+        id,
+        fields: {
+            'Employee Number': changes[id]['Employee Number']
+        }
+    };
+
+    console.log(`Submitting employee number update for record ID: ${id}`);
+
+    try {
+        const response = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ records: [update] })
+        });
+
+        if (!response.ok) {
+            const errorDetails = await response.json();
+            console.error('Failed to submit employee number:', errorDetails);
+            alert(`Failed to submit employee number: ${errorDetails.message || 'Unknown error'}`);
+        } else {
+            console.log('Employee number submitted successfully!');
+            alert('Employee number submitted successfully!');
+            fetchData(); // Refresh data to display the updated employee number
+        }
+    } catch (error) {
+        console.error('Failed to submit employee number:', error);
+        alert('Failed to submit employee number: ' + error.message);
+    }
+}
+
 // Filter results based on search input
 function filterResults() {
     const searchValue = document.getElementById('searchBar').value.toLowerCase();
     const filteredRecords = records.filter(record => {
         const fullName = record.fields['Full Name'] || ''; // Ensure Full Name is a string or empty string
-        return fullName.toLowerCase().includes(searchValue) && 
-               !fullName.toLowerCase().endsWith('branch');
+        return fullName.toLowerCase().includes(searchValue);
     });
+
+    // Activate search mode if the search value returns a result
+    searchMode = filteredRecords.some(record => !record.fields['Employee Number']);
     console.log(`Filtered results to ${filteredRecords.length} records based on search value: ${searchValue}`);
     displayData(filteredRecords);
 }
-
 
 // Submit changes to Airtable
 async function submitChanges() {
@@ -184,6 +251,14 @@ async function submitChanges() {
         console.error('Failed to submit changes:', error);
         alert('Failed to submit changes: ' + error.message);
     }
+}
+
+// Remove the highlight when the user clicks the submit button
+function removeHighlightsOnSubmit() {
+    const inputs = document.querySelectorAll('input.time-input');
+    inputs.forEach(input => {
+        input.style.backgroundColor = ""; // Remove background color
+    });
 }
 
 // Logout function
