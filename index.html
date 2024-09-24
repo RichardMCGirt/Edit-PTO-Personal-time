@@ -14,8 +14,7 @@
             <p id="loadingText">Fetching the latest data!</p>
         </div>
         <div class="card shadow p-4">
-            <h1>HR Access Portal</h1>
-            <br>
+      
             <div id="content" class="d-none">
                 <div class="form-row mb-3">
                     <label for="quarter-start" class="col-sm-3 col-form-label text-right">Quarter Start:</label>
@@ -33,26 +32,17 @@
                 <div class="form-row mb-3 justify-content-center">
                     <input type="text" id="searchBar" class="form-control" placeholder="Search by Full Name..." onkeyup="filterResults()" style="width: 65%;">
                 </div>
-                <table class="table table-striped" id="dataTable">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Personal time</th>
-                            <th scope="col">PTO Hours</th>
-                            <th scope="col">PTO Hours used</th>
-
-                      
-
-                        </tr>
-                    </thead>
-                    <!-- HTML -->
-
-
-                    <tbody id="tableBody">
-                        <!-- Data will be inserted here -->
-                    </tbody>
-                </table>
-                <button onclick="submitChanges()" class="btn btn-primary btn-block sticky-button">Submit Changes</button>
+                <div class="container">
+                    <div class="scrollable-table">
+                        <table class="table table-striped sticky-header" id="dataTable">
+                            <tbody id="tableBody">
+                                <!-- Data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="submitChanges()" class="submitbutton">Submit Changes</button>
+                </div>
+                
             </div>
         </div>
     </div>

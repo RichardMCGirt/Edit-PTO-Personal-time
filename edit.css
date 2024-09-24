@@ -27,29 +27,6 @@ header {
     margin-bottom: 20px;
 }
 
-h1 {
-    margin: 0;
-    font-size: 26px;
-    color: #343a40;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.logout-button {
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.logout-button:hover {
-    background-color: #c82333;
-}
-
 .loading-message {
     font-size: 18px;
     color: #333;
@@ -69,23 +46,26 @@ table {
 }
 
 table, th, td {
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
 }
 
 th, td {
     padding: 10px;
-    text-align: left;
-    font-size: 14px;
+    text-align: center;
+    font-size: 16px;
 }
 
 th {
     background-color: #343a40;
     color: #fff;
     text-align: center;
+    font-weight: bolder;
+    font-size: 18px;
+
 }
 
 #searchBar {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
@@ -93,17 +73,7 @@ th {
     font-size: 16px;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    display: block;
-    margin: 0 auto;
-}
+
 
 button:hover {
     background-color: #0056b3;
@@ -152,6 +122,16 @@ button:hover {
     font-weight: bold;
 }
 
+/* Style for making the table headers sticky */
+.sticky-header th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 2px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
 .form-value {
     color: #1abc9c;
     font-weight: bold;
@@ -163,25 +143,51 @@ button:hover {
     color: red;
 }
 
-button.sticky-button {
-    position: -webkit-sticky; /* For Safari */
-    position: sticky;
-    bottom: 50px; /* Adjust margin from the bottom */
-    left: 50%;
-    transform: translateX(-50%); /* Center the button horizontally */
-    z-index: 1000;
-    background-color: #007bff;
-    color: white;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 10px; /* Rounds the corners */
-    cursor: pointer;
-    font-size: 16px;
-    width: 25%;
-    text-align: center;
-    transition: background-color 0.3s;
-
+/* Container to hold the scrollable table and button */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
+
+/* Styling for the scrollable table */
+.scrollable-table {
+    overflow-y: auto;
+    max-height: 850px;
+    width: 100%;
+    margin-bottom: 20px; /* Adds space between the table and the button */
+}
+
+/* Styling for the submit button */
+.submitbutton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submitbutton:hover {
+    background-color: #45a049;
+}
+
+/* Responsive adjustments based on screen size */
+@media (max-width: 768px) {
+    .submitbutton {
+        width: 80%; /* Full width button for smaller screens */
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 769px) {
+    .submitbutton {
+        width: auto; /* Auto width for larger screens */
+    }
+}
+
 
 /* CSS */
 #loadingMessage {
