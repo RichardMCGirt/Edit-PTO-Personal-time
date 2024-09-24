@@ -65,9 +65,8 @@ th {
 }
 
 #searchBar {
-    width: 50%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -111,16 +110,7 @@ button:hover {
     text-align: center;
 }
 
-.small-input {
-    width: 30%;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    background-color: #34495e;
-    color: #1abc9c;
-    font-size: 20px;
-    font-weight: bold;
-}
+
 
 /* Style for making the table headers sticky */
 .sticky-header th {
@@ -219,9 +209,7 @@ button:hover {
 }
 
 
-button.sticky-button:hover {
-    background-color: #0056b3; /* New background color on hover */
-}
+
 
 @media (max-width: 767px) {
     .container {
