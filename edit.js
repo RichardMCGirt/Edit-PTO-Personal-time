@@ -140,7 +140,7 @@ function displayData(records) {
                 <th>Full Name</th>
                 <th>Personaltime</th>
                 <th>PTO Total</th>
-                <th>PTO</th>
+                <th>PTO Used</th>
             </tr>
         `;
     }
