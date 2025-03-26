@@ -2,9 +2,8 @@ const apiKey1 = 'pat6QyOfQCQ9InhK4.4b944a38ad4c503a6edd9361b2a6c1e7f02f216ff0560
 const baseId1 = 'app9gw2qxhGCmtJvW';
 const tableId1 = 'tbljmLpqXScwhiWTt'; // Table for PTO/Personal time
 
-const apiKey2 = 'patk8XGTUEck2nwg3.785361d5efcf3e7ad4305cd5d47e8fc08029043abe81d6997112f4024ce2afb9';
-const baseId2 = 'appehs4OWDzGWYCrP';
-const tableId2 = 'tblwtpHlA3CYpa02W'; // Table for Employee Number
+
+
 
 const tableBody = document.getElementById('tableBody');
 const loadingMessage = document.getElementById('loadingMessage');
@@ -75,9 +74,9 @@ async function fetchEmployeeNumbers() {
     let offset = '';
 
     do {
-        const response = await fetch(`https://api.airtable.com/v0/${baseId2}/${tableId2}?${offset}`, {
+        const response = await fetch(`https://api.airtable.com/v0/${baseId1}/${tableId1}?${offset}`, {
             headers: {
-                Authorization: `Bearer ${apiKey2}`
+                Authorization: `Bearer ${apiKey1}`
             }
         });
         const data = await response.json();
@@ -88,6 +87,28 @@ async function fetchEmployeeNumbers() {
     console.log("Fetched Employee Records:", employeeRecords); // Log fetched records
     return employeeRecords;
 }
+
+function showToast(message, duration = 5000) {
+    const toast = document.createElement('div');
+    toast.innerHTML = message;
+    toast.style.background = '#28a745';
+    toast.style.color = '#fff';
+    toast.style.padding = '12px 18px';
+    toast.style.marginTop = '10px';
+    toast.style.borderRadius = '8px';
+    toast.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    toast.style.fontSize = '14px';
+    toast.style.maxWidth = '300px';
+    toast.style.wordWrap = 'break-word';
+
+    const container = document.getElementById('toastContainer');
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, duration);
+}
+
 
 async function fetchData() {
     let offset = '';
@@ -112,7 +133,7 @@ async function fetchData() {
 
     console.log(`Total records fetched: ${totalFetched}`, records);
     // Sort records by Employee Number if it exists
-    records.sort((a, b) => (a.fields['Employee Number'] || 0) - (b.fields['Employee Number'] || 0));
+    records.sort((a, b) => (a.fields['date7'] || 0) - (b.fields['date7'] || 0));
     displayData(records);
 
     hideLoadingMessage(); // Hide loading message
@@ -131,7 +152,7 @@ function displayData(records) {
                 <th>Personaltime</th>
                 <th>PTO Total</th>
                 <th>PTO Used</th>
-                <th>Employee Number</th> <!-- Display employee number header -->
+                <th>Week ending date</th> <!-- Display employee number header -->
             </tr>
         `;
     } else {
@@ -152,7 +173,7 @@ function displayData(records) {
             <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
             <td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO Total" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
             <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-            ${searchMode ? `<td><input type="number" value="${record.fields['Employee Number'] || ''}" data-id="${record.id}" data-field="Employee Number" class="form-control employee-input" oninput="storeChange(this)"></td>` : ''}
+${searchMode ? `<td><input type="date" value="${formatDate(record.fields['date7'])}" data-id="${record.id}" data-field="date7" class="form-control employee-input" oninput="storeChange(this)"></td>` : ''}
         `;
         tableBody.appendChild(row);
     });
@@ -168,19 +189,30 @@ function displayData(records) {
     }
 }
 
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+
 // Store changes in the changes object
 function storeChange(input) {
     const id = input.dataset.id;
     const field = input.dataset.field;
     let value = input.value;
 
-    if (field === 'Employee Number') {
-        value = parseInt(value, 10);
-        if (isNaN(value)) {
-            alert("Employee Number must be a valid number.");
+    if (field === 'date7') {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+            alert("Please enter a valid date for date7.");
+            input.value = '';
             return;
         }
+        value = date.toISOString(); // Store in ISO format for Airtable
     }
+    
+    
 
     input.style.backgroundColor = "lightblue"; // Set background color to indicate change
 
@@ -226,9 +258,9 @@ async function submitChanges() {
             const fields = { ...changes[id] }; // Clone the fields to modify without affecting the original
 
             // Check if there is an Employee Number field and handle it separately
-            if (fields.hasOwnProperty('Employee Number')) {
-                const employeeNumber = fields['Employee Number'];
-                delete fields['Employee Number']; // Remove Employee Number from the PTO/Personal time table update
+            if (fields.hasOwnProperty('date7')) {
+                const employeeNumber = fields['date7'];
+                delete fields['date7']; // Remove Employee Number from the PTO/Personal time table update
 
                 const fullName = records.find(record => record.id === id)?.fields['Full Name']; // Get the Full Name from the PTO records
 
@@ -241,7 +273,7 @@ async function submitChanges() {
                     if (matchingEmployee) {
                         updatesEmployee.push({
                             id: matchingEmployee.id, // Update using the correct record ID in the Employee table
-                            fields: { 'Employee Number': employeeNumber } // Update Employee Number in the Employee table only
+                            fields: { 'date7': employeeNumber } // Update Employee Number in the Employee table only
                         });
                     } else {
                         console.warn(`No matching employee found for Full Name: ${fullName}`);
@@ -284,10 +316,10 @@ async function submitChanges() {
 // Submit changes for Employee Number (in the Employee table)
 if (updatesEmployee.length > 0) {
     try {
-        const response = await fetch(`https://api.airtable.com/v0/${baseId2}/${tableId2}`, {
+        const response = await fetch(`https://api.airtable.com/v0/${baseId1}/${tableId1}`, {
             method: 'PATCH',
             headers: {
-                Authorization: `Bearer ${apiKey2}`,
+                Authorization: `Bearer ${apiKey1}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ records: updatesEmployee })
@@ -297,7 +329,7 @@ if (updatesEmployee.length > 0) {
 
         // Check if the response is not ok and log detailed error if it failed
         if (!response.ok) {
-            console.error('Failed to submit Employee Number changes:', responseData);
+            console.error('Failed to submit date7 changes:', responseData);
             throw new Error(`Failed to update Employee Number. Status: ${response.status}. Message: ${responseData.error?.message || 'Unknown error'}`);
         }
 
@@ -308,12 +340,36 @@ if (updatesEmployee.length > 0) {
 }
 
 
-    // Refresh data after submission
-    await fetchData();
+      // Refresh data after submission
+      await fetchData();
 
-    // Clear the search bar and reset search mode
-    document.getElementById('searchBar').value = ''; // Clear the search bar
-    searchMode = false; // Reset search mode
+      // Prepare readable change summary for the toast
+      const changeSummary = Object.entries(changes).map(([id, fields]) => {
+        const record = records.find(rec => rec.id === id);
+        const fullName = record?.fields['Full Name'] || 'Unknown';
+    
+        const fieldChanges = Object.entries(fields).map(([field, value]) => {
+            // Format date7 fields to MM/DD/YYYY
+            if (field === 'date7') {
+                const date = new Date(value);
+                const formatted = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
+                return `${field}: ${formatted}`;
+            }
+            return `${field}: ${value}`;
+        }).join(', ');
+    
+        return `<strong>${fullName}:</strong> ${fieldChanges}`;
+    }).join('<br>');
+    
+    
+  
+      showToast(`<div><strong>Changes Submitted Successfully!</strong><br>${changeSummary}</div>`);
+  
+      // Clear the search bar and reset search mode
+      document.getElementById('searchBar').value = '';
+      searchMode = false;
+      changes = {}; // Clear changes after submit
+  
 }
 
 
