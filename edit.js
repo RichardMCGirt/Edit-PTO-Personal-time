@@ -195,6 +195,15 @@ function formatDate(dateString) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
 
+function formatUTCDateToMMDDYYYY(dateString) {
+    const date = new Date(dateString);
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${month}/${day}/${year}`;
+}
+
+
 
 // Store changes in the changes object
 function storeChange(input) {
@@ -349,10 +358,8 @@ if (updatesEmployee.length > 0) {
         const fullName = record?.fields['Full Name'] || 'Unknown';
     
         const fieldChanges = Object.entries(fields).map(([field, value]) => {
-            // Format date7 fields to MM/DD/YYYY
             if (field === 'date7') {
-                const date = new Date(value);
-                const formatted = `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
+                const formatted = formatUTCDateToMMDDYYYY(value);
                 return `${field}: ${formatted}`;
             }
             return `${field}: ${value}`;
@@ -360,6 +367,7 @@ if (updatesEmployee.length > 0) {
     
         return `<strong>${fullName}:</strong> ${fieldChanges}`;
     }).join('<br>');
+    
     
     
   
