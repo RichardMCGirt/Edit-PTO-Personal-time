@@ -48,6 +48,17 @@ window.onbeforeunload = function() {
 function showLoadingMessage() {
     loadingMessage.classList.remove('d-none');
     content.classList.add('d-none');
+    document.getElementById('submitButton').style.display = 'none';
+    
+    // Hide additional elements
+    const searchBar = document.getElementById('searchBar');
+    if (searchBar) searchBar.style.display = 'none';
+
+    const dataTable = document.getElementById('dataTable');
+    if (dataTable) dataTable.style.display = 'none';
+
+    const mainCard = document.getElementById('mainCard');
+    if (mainCard) mainCard.style.display = 'none';  // 🔥 Hide the card itself
 }
 
 // Function to filter results based on the search input
@@ -67,6 +78,17 @@ function filterResults() {
 function hideLoadingMessage() {
     loadingMessage.classList.add('d-none');
     content.classList.remove('d-none');
+    document.getElementById('submitButton').style.display = 'block';
+    
+    // Show additional elements
+    const searchBar = document.getElementById('searchBar');
+    if (searchBar) searchBar.style.display = 'block';
+
+    const dataTable = document.getElementById('dataTable');
+    if (dataTable) dataTable.style.display = 'table';
+
+    const mainCard = document.getElementById('mainCard');
+    if (mainCard) mainCard.style.display = 'block'; // 🔥 Show the card again
 }
 
 async function fetchEmployeeNumbers() {
