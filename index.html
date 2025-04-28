@@ -7,32 +7,36 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="edit.css">
 </head>
-<body>
-   
-        <div id="loadingMessage" class="d-none">
-            <div class="spinner"></div>
-            <p id="loadingText">Fetching the latest data!</p>
-        </div>
-        <div class="card shadow p-4">
-      
-            <div id="content" class="d-none">
-                <div class="form-row mb-3">
+<body style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f8f9fa;">
+    <div id="loadingMessage" class="d-none">
+        <div class="spinner"></div>
+        <p id="loadingText">Fetching the latest data!</p>
+    </div>
+
+    
+    <div class="card shadow p-4" style="padding-top: 40px;">
+        <div id="content" class="d-none">
+
+                <div class="form-row mb-3" style="display: none;">
                     <label for="quarter-start" class="col-sm-3 col-form-label text-right">Quarter Start:</label>
-                    <div class="col-sm-9">
-                        <input type="date" id="quarter-end" name="quarter_end" class="form-control" readonly>
-                    </div>
-                </div>
-                <div class="form-row mb-3">
-                    <label for="quarter-end" class="col-sm-3 col-form-label text-right">Quarter End:</label>
                     <div class="col-sm-9">
                         <input type="date" id="quarter-start" name="quarter_start" class="form-control" readonly>
                     </div>
                 </div>
+                <div class="form-row mb-3" style="display: none;"> 
+                    <label for="quarter-end" class="col-sm-3 col-form-label text-right">Quarter End:</label>
+                    <div class="col-sm-9">
+                        <input type="date" id="quarter-end" name="quarter_end" class="form-control" readonly>
+                    </div>
+                </div>
+                
                 <br>
                 <div id="toastContainer" style="position: fixed; bottom: 50%; right: 50%; z-index: 9999;"></div>
 
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
                     <input type="text" id="searchBar" class="form-control" placeholder="Search by Full Name..." onkeyup="filterResults()" style="width: 65%;">
                 </div>
+                                </div>
                 <div class="container">
                     <div class="scrollable-table">
                         <table class="table table-striped sticky-header" id="dataTable">

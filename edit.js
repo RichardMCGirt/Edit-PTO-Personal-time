@@ -181,12 +181,51 @@ ${searchMode ? `<td><input type="date" value="${formatDate(record.fields['date7'
     console.log(`Displayed ${records.length} records in the table`);
     checkQuarterStartOnce();
 
-    // Set Quarter Start and End Dates
-    if (records.length > 0) {
-        const firstRecord = records[0];
-        quarterStartInput.value = firstRecord.fields.PersonalStartDate || '';
-        quarterEndInput.value = firstRecord.fields.PersonalTimeendDates || '';
-    }
+// Set Quarter Start and End Dates based on today's date
+const today = new Date();
+let quarterStart = '';
+let quarterEnd = '';
+
+if (today < new Date('2025-06-25')) {
+    quarterStart = '2025-06-25';
+    quarterEnd = '2025-09-30';
+} else if (today < new Date('2025-09-30')) {
+    quarterStart = '2025-09-30';
+    quarterEnd = '2025-12-30';
+} else if (today < new Date('2025-12-30')) {
+    quarterStart = '2025-12-30';
+    quarterEnd = '2026-03-31';
+} else if (today < new Date('2026-03-31')) {
+    quarterStart = '2026-03-31';
+    quarterEnd = '2026-06-30';
+} else if (today < new Date('2026-06-30')) {
+    quarterStart = '2026-06-30';
+    quarterEnd = '2026-09-29';
+} else if (today < new Date('2026-09-29')) {
+    quarterStart = '2026-09-29';
+    quarterEnd = '2026-12-29';
+} else if (today < new Date('2026-12-29')) {
+    quarterStart = '2026-12-29';
+    quarterEnd = '2027-03-30';
+} else if (today < new Date('2027-03-30')) {
+    quarterStart = '2027-03-30';
+    quarterEnd = '2027-06-29';
+} else if (today < new Date('2027-06-29')) {
+    quarterStart = '2027-06-29';
+    quarterEnd = '2027-09-28';
+} else if (today < new Date('2027-09-28')) {
+    quarterStart = '2027-09-28';
+    quarterEnd = '2027-12-28';
+} else {
+    quarterStart = '';
+    quarterEnd = '';
+}
+
+// Set the values in the inputs
+quarterStartInput.value = quarterStart;
+quarterEndInput.value = quarterEnd;
+
+
 }
 
 function formatDate(dateString) {
