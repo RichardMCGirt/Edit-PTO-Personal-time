@@ -2,15 +2,14 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
     margin: 0;
-    padding: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    height: 100vh;
-    overflow: auto;
-    padding-top: env(safe-area-inset-top); /* Ensures safe area for mobile (iOS, etc.) */
-
+    min-height: 100vh;
+    box-sizing: border-box;
 }
+
 
 .container {
     background: white;
@@ -156,10 +155,10 @@ button:hover {
 /* Styling for the scrollable table */
 .scrollable-table {
     overflow-y: auto;
-    max-height: 850px;
     width: 100%;
-    margin-bottom: 20px; /* Adds space between the table and the button */
+    margin-bottom: 20px;
 }
+
 
 /* Styling for the submit button */
 .submitbutton {
