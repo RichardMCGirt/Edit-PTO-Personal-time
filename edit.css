@@ -69,10 +69,19 @@ th {
 
 #searchBar {
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    margin: 10px auto;
+    border: 2px solid #333; /* ✅ Darker & bolder */
     border-radius: 5px;
     font-size: 16px;
+    width: fit-content;
+    display: block;
+}
+
+
+#searchBar:focus {
+    border-color: #000;
+    outline: none;
+    box-shadow: 0 0 4px #00000099;
 }
 
 
