@@ -2,9 +2,6 @@ const apiKey1 = 'pat6QyOfQCQ9InhK4.4b944a38ad4c503a6edd9361b2a6c1e7f02f216ff0560
 const baseId1 = 'appD3QeLneqfNdX12';
 const tableId1 = 'tbljmLpqXScwhiWTt'; // Table for PTO/Personal time
 
-
-
-
 const tableBody = document.getElementById('tableBody');
 const loadingMessage = document.getElementById('loadingMessage');
 const content = document.getElementById('content');
