@@ -1,14 +1,27 @@
-  (function () {
+(function () {
     const correctPassword = "Vanir";
+    const mainScriptSrc = "edit.js"; // <-- Change this if your script filename/path is different
 
-    // Check if already authenticated
-    if (localStorage.getItem("vanirAuthorized") === "true") return;
+    // If already authenticated, restore app (if needed) and inject main script
+    if (localStorage.getItem("vanirAuthorized") === "true") {
+        // Only inject script if it's not already present
+        if (!document.querySelector(`script[src="${mainScriptSrc}"]`)) {
+            var mainScript = document.createElement('script');
+            mainScript.src = mainScriptSrc;
+            mainScript.type = "text/javascript";
+            document.body.appendChild(mainScript);
+        }
+        return;
+    }
 
-    // Immediately hide page
+    // Save the original HTML so we can restore it after authentication
+    const originalHtml = document.body.innerHTML;
+
+    // Immediately hide the page content
     document.body.style.margin = "0";
     document.body.innerHTML = "";
 
-    // Create full-page black overlay
+    // Create the full-page black overlay
     const overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.inset = "0";
@@ -48,17 +61,25 @@
     error.style.display = "none";
 
     button.onclick = () => {
-      if (input.value.trim() === correctPassword) {
-        localStorage.setItem("vanirAuthorized", "true");
-        overlay.remove(); // allow page to show
-        location.reload(); // refresh to show actual page
-      } else {
-        error.style.display = "block";
-      }
+        if (input.value.trim() === correctPassword) {
+            localStorage.setItem("vanirAuthorized", "true");
+            // Restore the main page HTML
+            document.body.innerHTML = originalHtml;
+            // Remove the overlay (not strictly necessary since we wiped innerHTML)
+            // overlay.remove();
+
+            // Dynamically inject your main app script so it runs on restored HTML
+            var mainScript = document.createElement('script');
+            mainScript.src = mainScriptSrc;
+            mainScript.type = "text/javascript";
+            document.body.appendChild(mainScript);
+        } else {
+            error.style.display = "block";
+        }
     };
 
     input.addEventListener("keydown", e => {
-      if (e.key === "Enter") button.click();
+        if (e.key === "Enter") button.click();
     });
 
     overlay.appendChild(heading);
@@ -66,4 +87,4 @@
     overlay.appendChild(button);
     overlay.appendChild(error);
     document.body.appendChild(overlay);
-  })();
+})();
