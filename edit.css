@@ -22,24 +22,6 @@ body {
 
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.loading-message {
-    font-size: 18px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.content {
-    display: none;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -63,7 +45,6 @@ th {
     text-align: center;
     font-weight: bolder;
     font-size: 18px;
-
 }
 
 #searchBar {
@@ -76,40 +57,11 @@ th {
     display: block;
 }
 
-
-#searchBar:focus {
-    border-color: #000;
-    outline: none;
-    box-shadow: 0 0 4px #00000099;
-}
-
-
-
-button:hover {
-    background-color: #0056b3;
-}
-
 .form-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.form-label {
-    color: #333;
-    font-weight: bold;
-    width: 30%;
-    text-align: right;
-    padding-right: 10px;
-}
-
-.date-input {
-    width: 65%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
 }
 
 .time-input {
@@ -131,17 +83,6 @@ button:hover {
     border-bottom: 2px solid #ccc;
     padding: 8px;
     text-align: center;
-}
-
-.form-value {
-    color: #1abc9c;
-    font-weight: bold;
-    font-size: 20px;
-    text-align: left;
-}
-
-.validation-message {
-    color: red;
 }
 
 /* Container to hold the scrollable table and button */
@@ -171,11 +112,6 @@ button:hover {
     cursor: pointer;
 }
 
-.submitbutton:hover {
-    background-color: #45a049;
-}
-
-
 /* CSS */
 #loadingMessage {
     text-align: center;
@@ -204,8 +140,6 @@ button:hover {
     margin-top: 10px;
     font-weight: bold;
 }
-
-
 
 /* For mobile responsiveness */
 @media (max-width: 768px) {
@@ -324,6 +258,3 @@ html, body {
     width: 100%;
 }
 
-.submitbutton:hover {
-    background-color: #45a049;
-}

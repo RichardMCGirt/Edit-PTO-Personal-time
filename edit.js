@@ -128,7 +128,6 @@ function showToast(message, duration = 5000) {
     }, duration);
 }
 
-
 async function fetchData() {
     let offset = '';
     records = []; // Reset the records array
@@ -157,7 +156,6 @@ async function fetchData() {
 
     hideLoadingMessage(); // Hide loading message
 }
-
 
 // Display data in the table
 function displayData(records) {
@@ -190,7 +188,9 @@ function displayData(records) {
         row.innerHTML = `
             <td>${record.fields['Full Name']}</td>
             <td><input type="number" value="${record.fields['Personaltime'] || 0}" data-id="${record.id}" data-field="Personaltime" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
-            <td><input type="number" value="${record.fields['PTO Total'] || 0}" data-id="${record.id}" data-field="PTO Total" class="form-control time-input" min="0" step="1" oninput="storeChange(this)" disabled></td>
+<td style="background: #f0f0f0; font-style: italic;" title="This is calculated automatically">
+    ${record.fields['PTO Total'] ?? 0}
+</td>
             <td><input type="number" value="${record.fields['PTO'] || 0}" data-id="${record.id}" data-field="PTO" class="form-control time-input" min="0" step="1" oninput="storeChange(this)"></td>
 ${searchMode ? `<td><input type="date" value="${formatDate(record.fields['date7'])}" data-id="${record.id}" data-field="date7" class="form-control employee-input" oninput="storeChange(this)"></td>` : ''}
         `;
@@ -243,8 +243,6 @@ if (today < new Date('2025-06-25')) {
 // Set the values in the inputs
 quarterStartInput.value = quarterStart;
 quarterEndInput.value = quarterEnd;
-
-
 }
 
 function formatDate(dateString) {
@@ -260,8 +258,6 @@ function formatUTCDateToMMDDYYYY(dateString) {
     const year = date.getUTCFullYear();
     return `${month}/${day}/${year}`;
 }
-
-
 
 // Store changes in the changes object
 function storeChange(input) {
@@ -279,8 +275,6 @@ function storeChange(input) {
         value = date.toISOString(); // Store in ISO format for Airtable
     }
     
-    
-
     input.style.backgroundColor = "lightblue"; // Set background color to indicate change
 
     // Ensure Personaltime is a valid number
@@ -302,8 +296,6 @@ function storeChange(input) {
             value = 0;
         }
     }
-
-
     if (!changes[id]) {
         changes[id] = {};
     }
@@ -405,8 +397,6 @@ if (updatesEmployee.length > 0) {
         console.error('Error submitting Employee Number changes:', error.message);
     }
 }
-
-
       // Refresh data after submission
       await fetchData();
 
@@ -426,9 +416,6 @@ if (updatesEmployee.length > 0) {
         return `<strong>${fullName}:</strong> ${fieldChanges}`;
     }).join('<br>');
     
-    
-    
-  
       showToast(`<div><strong>Changes Submitted Successfully!</strong><br>${changeSummary}</div>`);
   
       // Clear the search bar and reset search mode
@@ -437,12 +424,6 @@ if (updatesEmployee.length > 0) {
       changes = {}; // Clear changes after submit
   
 }
-
-
-
-
-
-
 
 // Initial fetch
 fetchData();
